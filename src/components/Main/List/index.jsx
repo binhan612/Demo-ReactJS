@@ -75,13 +75,10 @@ const List = ({
             return (
                 <li key={`pagination-${index}`}>
                     <button
-                        className={`btn pagination-item ${
-                            item === currentPage
-                                ? "pagination-item-active"
-                                : item === "Previous page" && currentPage === 1
-                                ? "pagination-item-disable"
-                                : ""
-                        } `}
+                        className={`btn pagination-item ${item === currentPage ? "pagination-item-active"
+                            : ((currentPage === 1 && (item === "Previous page" && currentPage <= 1 ? "pagination-item-disable" : "")) ||
+                                (currentPage === amount && (item === 'Next page' && currentPage === amount ? "pagination-item-disable" : "")))
+                            } `}
                         key={`pagination-${index}`}
                         onClick={() => onClickPagination(item)}
                     >

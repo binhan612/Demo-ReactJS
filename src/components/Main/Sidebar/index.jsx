@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 
 import Star from "../../Star";
@@ -58,8 +58,8 @@ const categoriesData = [
     { id: 7, name: " Health, Fitness & Beauty" },
 ];
 const typeData = [
-    { id: 1, name: "Coffee/cappuccino" },
-    { id: 2, name: "Food" },
+    { id: 1, name: "Macppuccino" },
+    { id: 2, name: "Fonel" },
     { id: 3, name: "Blenders" },
     { id: 4, name: "Multicookers" },
     { id: 5, name: "Portable beverage" },
@@ -97,6 +97,9 @@ const Sidebar = ({
     const [isActive, setIsActive] = useState({});
     const [isFilter, setIsFilter] = useState(false);
     const [isChecked, setIsChecked] = useState({});
+    const [brandSearch, setBrandSearch] = useState('');
+    const [newBrandData, setNewBrandData] = useState(brandData);
+    const brandSearchTyping = useRef(null);
 
     const handelCategoriesClick = (id) => {
         setIsFilter(true);
@@ -126,6 +129,19 @@ const Sidebar = ({
         setCurrentPage(1);
         setIsFilter(true);
     };
+
+    const handleBrandSearch = (e) => {
+        const value = e.target.value;
+        setBrandSearch(value);
+        if (brandSearchTyping) clearTimeout(brandSearchTyping.current);
+        brandSearchTyping.current = setTimeout(() => {
+            const ArrBrandData = brandData.filter((brand) => brand.name.includes(value));
+            setNewBrandData(ArrBrandData);
+        }, 500);
+    };
+    // useEffect(() => {
+    //     renderSoft(newBrandData, "brand")
+    // }, [newBrandData]);
 
     const handelRangerPriceClick = (index) => {
         setIsActive({
@@ -199,17 +215,15 @@ const Sidebar = ({
                     </a>
                     {item.list && (
                         <ul
-                            className={`categories-dropdown ${
-                                categories.idParentCategories === item.id && "categories-dropdown-active"
-                            }`}
+                            className={`categories-dropdown ${categories.idParentCategories === item.id && "categories-dropdown-active"
+                                }`}
                         >
                             {item.list.map((itemChildren, indexChildren) => {
                                 return (
                                     <li
-                                        className={`categories-item text-clamp text-clamp--1 ${
-                                            categories.idChildrenCategories === itemChildren.id &&
+                                        className={`categories-item text-clamp text-clamp--1 ${categories.idChildrenCategories === itemChildren.id &&
                                             "sidebar-active"
-                                        }`}
+                                            }`}
                                         key={`categories-dropdown-${indexChildren}`}
                                         onClick={() =>
                                             setCategories({
@@ -301,9 +315,9 @@ const Sidebar = ({
                         <button className="btn ">
                             <BiSearchAlt2 />
                         </button>
-                        <input className="header-input" />
+                        <input className="header-input" value={brandSearch} onChange={handleBrandSearch} />
                     </div>
-                    <div className="categories-container">{renderSoft(brandData, "brand")}</div>
+                    <div className="categories-container">{renderSoft(newBrandData, "brand")}</div>
                 </section>
                 <section className="rate">
                     <h2 className="categories-title">Rating</h2>

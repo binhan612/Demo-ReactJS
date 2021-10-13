@@ -2,15 +2,15 @@ import { put, takeEvery } from "redux-saga/effects";
 import axios from "axios";
 
 import {
-    GET_PRODUCT,
+    GET_PRODUCT_REQUESTED,
     GET_PRODUCT_FAIL,
     GET_PRODUCT_SUCCESS,
-    GET_PRODUCT_FILTER,
+    GET_PRODUCT_FILTER_REQUESTED,
     GET_PRODUCT_FILTER_FAIL,
     GET_PRODUCT_FILTER_SUCCESS,
 } from "../constants";
 
-const apiUrl = process.env.REACT_APP_API_URL;
+const apiUrl = 'http://localhost:8000';
 
 function* getProductSaga(action) {
     try {
@@ -82,6 +82,6 @@ function* getProductFilterSaga(action) {
 }
 
 export default function* productSaga() {
-    yield takeEvery(GET_PRODUCT, getProductSaga);
-    yield takeEvery(GET_PRODUCT_FILTER, getProductFilterSaga);
+    yield takeEvery(GET_PRODUCT_REQUESTED, getProductSaga);
+    yield takeEvery(GET_PRODUCT_FILTER_REQUESTED, getProductFilterSaga);
 }
